@@ -1,4 +1,5 @@
 from redbot.core import commands, Config, checks
+from pathlib import Path
 import discord
 import random
 
@@ -7,8 +8,9 @@ class RainCogs(commands.Cog):
 
 	def __init__(self, bot) -> None:
 		self.bot = bot
+		self.script_location = Path(__file__).absolute().parent
 		self.config = Config.get_conf(self, 23975432657)
-		with open("./gifs.txt", "r") as f:
+		with open(self.script_location / "gifs.txt", "r") as f:
 			self.gifs = [line.rstrip() for line in f]
 		default_guild = {
 			"blessrole": None
@@ -33,7 +35,7 @@ class RainCogs(commands.Cog):
 	@rain.group()
 	async def manifest(self, ctx: commands.Context) -> None:
 		"""the true manifestation"""
-		await ctx.send(content="my physical manifestation... a plushie!", file=discord.File(r"./rain.png"))
+		await ctx.send(content="my physical manifestation... a plushie!", file=discord.File(self.script_location / "rain.png"))
 
 	@config.command(name="blessrole")
 	async def config_blessrole(self, ctx: commands.Context, blessRole) -> None:
