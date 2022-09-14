@@ -69,7 +69,7 @@ class RainCogs(commands.Cog):
 			try:
 				return await ctx.reply(f"<:manifest:1019605971410096250> **#{gifId}**\n{self.gifs[gifId]}")
 			except IndexError:
-				return await ctx.reply(f"there was an error trying to get GIF #{gifId}, perhaps it doesn't exist?")
+				return await ctx.reply(f"there was an error trying to get GIF **#{gifId}**, perhaps it doesn't exist?")
 
 		return await ctx.reply(f"<:manifest:1019605971410096250> **#{gifId}**\n{self.gifs[gifId]}")
 	
