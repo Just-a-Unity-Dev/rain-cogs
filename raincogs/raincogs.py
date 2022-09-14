@@ -8,6 +8,8 @@ class RainCogs(commands.Cog):
 	def __init__(self, bot) -> None:
 		self.bot = bot
 		self.config = Config.get_conf(self, 23975432657)
+		with open("./gifs.txt", "r") as f:
+			self.gifs = [line.rstrip() for line in f]
 		default_guild = {
 			"blessrole": None
 		}
@@ -59,10 +61,6 @@ class RainCogs(commands.Cog):
 	@rain.command()
 	async def rgif(self, ctx: commands.Context):
 		"""the AI will send you one random gif for free"""
-		if self.gifs is not self.gifs or None:
-			# make sure the gif database is UP TO DATE.
-			with open("./gifs.txt", "r") as f:
-				self.gifs = [line.rstrip() for line in f]
 
 		await ctx.send(self.gifs[0, len(self.gifs) - 1])
 
