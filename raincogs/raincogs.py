@@ -27,6 +27,10 @@ class RainCogs(commands.Cog):
 		"""
 		pass
 
+	@rain.group()
+	async def manifest(self, ctx: commands.Context) -> None:
+		await ctx.reply(content="my physical manifestation... a plushie!", file=discord.File(r"./rain.png"))
+
 	@config.command()
 	async def blessrole(self, ctx: commands.Context, blessRole) -> None:
 		"""set the bless role (role id)"""
@@ -59,9 +63,9 @@ class RainCogs(commands.Cog):
 		if not target:
 			return await ctx.send_help()
 		if ctx.me is target:
-			return await ctx.send("you cant unbless me!")
+			return await ctx.send("you cant bless me! i'm already blessed internally!")
 		if ctx.author is target:
-			return await ctx.send("you cant unbless yourself!")
+			return await ctx.send("you cant bless yourself!")
 
 		blessed_role = await self.config.guild(ctx.guild).blessrole()
 		if not blessed_role:
@@ -77,9 +81,9 @@ class RainCogs(commands.Cog):
 		if not target:
 			return await ctx.send_help()
 		if ctx.me is target:
-			return await ctx.send("you cant bless me, i'm already blessed!")
+			return await ctx.send("you cant unbless me!")
 		if ctx.author is target:
-			return await ctx.send("you cant bless yourself!")
+			return await ctx.send("you cant unbless yourself!")
 		blessed_role = await self.config.guild(ctx.guild).blessrole()
 		if not blessed_role:
 			return await ctx.send("the server admin didn't set up bless roles correctly, uh oh!\n\n*just so you know, this is not your fault")
