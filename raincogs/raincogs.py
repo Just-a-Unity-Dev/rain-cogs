@@ -59,7 +59,7 @@ class RainCogs(commands.Cog):
 	@rain.command()
 	async def rgif(self, ctx: commands.Context):
 		"""the AI will send you one random gif for free"""
-		if self.gifs is not self.gifs:
+		if self.gifs is not self.gifs or None:
 			# make sure the gif database is UP TO DATE.
 			with open("./gifs.txt", "r") as f:
 				self.gifs = [line.rstrip() for line in f]
