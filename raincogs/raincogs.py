@@ -66,7 +66,7 @@ class RainCogs(commands.Cog):
 		blessed_role = await self.config.guild(ctx.guild).blessrole()
 		if not blessed_role:
 			return await ctx.send("the server admin didn't set up bless roles correctly, uh oh!\n\n*just so you know, this is not your fault. ping a server admin to fix this.*")
-		self.blessing(ctx, target, True)
+		await self.blessing(ctx, target, True)
 	
 	@rain.command(aliases=["shadowrealm"])
 	@checks.admin_or_permissions(manage_roles=True)
@@ -83,4 +83,4 @@ class RainCogs(commands.Cog):
 		blessed_role = await self.config.guild(ctx.guild).blessrole()
 		if not blessed_role:
 			return await ctx.send("the server admin didn't set up bless roles correctly, uh oh!\n\n*just so you know, this is not your fault")
-		self.blessing(ctx, target, False)
+		await self.blessing(ctx, target, False)
