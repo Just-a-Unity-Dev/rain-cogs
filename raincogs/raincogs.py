@@ -32,7 +32,7 @@ class RainCogs(commands.Cog):
 		"""
 		pass
 
-	@rain.group()
+	@rain.command()
 	async def manifest(self, ctx: commands.Context) -> None:
 		"""the true manifestation"""
 		return await ctx.reply(content="my physical manifestation... a plushie!", file=discord.File(self.script_location / "rain.png"))
@@ -60,12 +60,12 @@ class RainCogs(commands.Cog):
 		except discord.errors.Forbidden:
 			return await ctx.reply("the server admin didn't set up roles correctly, uh oh!\n\n*just so you know, this is not your fault. ping a server admin to fix this.*")
 
-	@rain.command()
+	@rain.command(aliases=["gif"])
 	async def rgif(self, ctx: commands.Context):
 		"""the AI will send you one random gif for free"""
 
 		return await ctx.reply(random.choice(self.gifs))
-
+	
 
 	@rain.command()
 	@checks.admin_or_permissions(manage_roles=True)
