@@ -61,8 +61,14 @@ class RainCogs(commands.Cog):
 			return await ctx.reply("the server admin didn't set up roles correctly, uh oh!\n\n*just so you know, this is not your fault. ping a server admin to fix this.*")
 
 	@rain.command(aliases=["gif"])
-	async def rgif(self, ctx: commands.Context):
+	async def rgif(self, ctx: commands.Context, gif: int = None):
 		"""the AI will send you one random gif for free"""
+
+		if gif is not None:
+			try:
+				return await ctx.reply(self.gifs[gif + 1])
+			except IndexError:
+				return await ctx.reply(f"there was an error trying to get GIF #{gif + 1}, perhaps it doesn't exist?")
 
 		return await ctx.reply(random.choice(self.gifs))
 	
