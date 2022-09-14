@@ -1,0 +1,8 @@
+{
+    "name": "raincogs",
+    "short": "A multipurpose (mostly useless) cog.",
+    "description": "A versatile multipurpose (mostly useless) custom made cog for me.",
+    "install_msg": "this is rain-cogs, a multipurpose (mostly useless!) cog designed for eclipse",
+    "author": ["eclips_e#0001"],
+    "tags": ["Utility", "Fun"]
+}
