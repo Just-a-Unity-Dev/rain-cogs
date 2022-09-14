@@ -62,8 +62,8 @@ class RainCogs(commands.Cog):
 			# make sure the gif database is UP TO DATE.
 			with open("./gifs.txt", "r") as f:
 				self.gifs = [line.rstrip() for line in f]
-		
-		await ctx.reply(random.choice(self.gifs))
+
+		await ctx.reply(self.gifs[0, len(self.gifs) - 1])
 
 
 	@rain.command()
