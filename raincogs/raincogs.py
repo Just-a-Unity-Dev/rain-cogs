@@ -13,7 +13,7 @@ class RainCogs(commands.Cog):
 		self.config.register_guild(**default_guild)
 
 	@commands.group()
-	async def rain(self) -> None:
+	async def rain(self, ctx: commands.Context) -> None:
 		"""
 		rain cogs - it's a cold cog
 		"""
@@ -21,7 +21,7 @@ class RainCogs(commands.Cog):
 
 	@rain.group()
 	@checks.admin_or_permissions(manage_guild=True)
-	async def config(self) -> None:
+	async def config(self, ctx: commands.Context) -> None:
 		"""
 		configuration for rain cogs
 		"""
