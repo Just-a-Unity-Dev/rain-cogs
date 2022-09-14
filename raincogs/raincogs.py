@@ -1,5 +1,6 @@
-import discord
 from redbot.core import commands, Config, checks
+import discord
+import random
 
 class RainCogs(commands.Cog):
 	"""multipurpose cog"""
@@ -53,6 +54,17 @@ class RainCogs(commands.Cog):
 				return await ctx.send(content=f"deblessed {target.mention}")
 		except discord.errors.Forbidden:
 			return await ctx.send("the server admin didn't set up roles correctly, uh oh!\n\n*just so you know, this is not your fault. ping a server admin to fix this.*")
+
+	@rain.command()
+	async def rgif(self, ctx: commands.Context):
+		"""the AI will send you one random gif for free"""
+		if self.gifs is not self.gifs:
+			# make sure the gif database is UP TO DATE.
+			with open("./gifs.txt", "r") as f:
+				self.gifs = [line.rstrip() for line in f]
+		
+		await ctx.reply(random.choice(self.gifs))
+
 
 	@rain.command()
 	@checks.admin_or_permissions(manage_roles=True)
