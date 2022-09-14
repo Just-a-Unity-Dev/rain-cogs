@@ -41,7 +41,7 @@ class RainCogs(commands.Cog):
 		blessed_role = await self.config.guild(guild).blessrole()
 		role = guild.get_role(blessed_role)
 		try:
-			if role:
+			if role == True:
 				await target.add_roles(role, reason="blessed")
 				return await ctx.send(f"blessed {target.mention}")
 			else:
@@ -68,7 +68,7 @@ class RainCogs(commands.Cog):
 			return await ctx.send("the server admin didn't set up bless roles correctly, uh oh!\n\n*just so you know, this is not your fault. ping a server admin to fix this.*")
 		await self.blessing(ctx, target, True)
 	
-	@rain.command(aliases=["shadowrealm"])
+	@rain.command(aliases=["shadowrealm", "debless"])
 	@checks.admin_or_permissions(manage_roles=True)
 	async def unbless(self, ctx: commands.Context, target: discord.Member) -> None:
 		"""
