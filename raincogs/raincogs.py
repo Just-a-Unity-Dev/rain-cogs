@@ -15,7 +15,7 @@ class RainCogs(commands.Cog):
 	@commands.group()
 	async def rain(self, ctx: commands.Context) -> None:
 		"""
-		rain cogs - it's a cold cog
+		it's a cold cog, afterall.
 		"""
 		pass
 
@@ -31,8 +31,8 @@ class RainCogs(commands.Cog):
 	async def manifest(self, ctx: commands.Context) -> None:
 		await ctx.reply(content="my physical manifestation... a plushie!", file=discord.File(r"./rain.png"))
 
-	@config.command()
-	async def blessrole(self, ctx: commands.Context, blessRole) -> None:
+	@config.command(name="blessrole")
+	async def config_blessrole(self, ctx: commands.Context, blessRole) -> None:
 		"""set the bless role (role id)"""
 		if blessRole is None:
 			await self.config.guild(ctx.guild).blessrole.set(None)
@@ -47,10 +47,10 @@ class RainCogs(commands.Cog):
 		try:
 			if roleToggle == True:
 				await target.add_roles(role, reason="blessed")
-				return await ctx.send(f"blessed {target.mention}")
+				return await ctx.send(content=f"blessed {target.mention}")
 			else:
 				await target.remove_roles(role, reason="deblessed")
-				return await ctx.send(f"deblessed {target.mention}")
+				return await ctx.send(content=f"deblessed {target.mention}")
 		except discord.errors.Forbidden:
 			return await ctx.send("the server admin didn't set up roles correctly, uh oh!\n\n*just so you know, this is not your fault. ping a server admin to fix this.*")
 
