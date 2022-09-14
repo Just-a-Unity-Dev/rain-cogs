@@ -63,7 +63,7 @@ class RainCogs(commands.Cog):
 	@rain.command(aliases=["gif"])
 	async def rgif(self, ctx: commands.Context, gif: int = None):
 		"""the AI will send you one random gif for free"""
-		gifId = gif + 1 or random.randint(0, len(self.gifs) - 1)
+		gifId = gif or random.randint(0, len(self.gifs) - 1)
 
 		if gif is not None:
 			try:
