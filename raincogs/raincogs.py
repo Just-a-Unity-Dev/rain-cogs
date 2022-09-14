@@ -35,7 +35,7 @@ class RainCogs(commands.Cog):
 	@rain.group()
 	async def manifest(self, ctx: commands.Context) -> None:
 		"""the true manifestation"""
-		await ctx.send(content="my physical manifestation... a plushie!", file=discord.File(self.script_location / "rain.png"))
+		return await ctx.reply(content="my physical manifestation... a plushie!", file=discord.File(self.script_location / "rain.png"))
 
 	@config.command(name="blessrole")
 	async def config_blessrole(self, ctx: commands.Context, blessRole) -> None:
@@ -44,7 +44,7 @@ class RainCogs(commands.Cog):
 			await self.config.guild(ctx.guild).blessrole.set(None)
 			return await ctx.reply("Reset the value of `blessrole` to `None`")
 		await self.config.guild(ctx.guild).blessrole.set(int(blessRole))
-		await ctx.reply(f"Set the value of `blessrole` to `{str(int(blessRole))}`")
+		return await ctx.reply(f"Set the value of `blessrole` to `{str(int(blessRole))}`")
 
 	async def blessing(self, ctx: commands.Context, target: discord.Member, roleToggle: bool):
 		guild = ctx.guild
@@ -53,18 +53,18 @@ class RainCogs(commands.Cog):
 		try:
 			if roleToggle == True:
 				await target.add_roles(role, reason="blessed")
-				return await ctx.send(content=f"blessed {target.mention}")
+				return await ctx.reply(content=f"blessed {target.mention}")
 			else:
 				await target.remove_roles(role, reason="deblessed")
-				return await ctx.send(content=f"deblessed {target.mention}")
+				return await ctx.reply(content=f"deblessed {target.mention}")
 		except discord.errors.Forbidden:
-			return await ctx.send("the server admin didn't set up roles correctly, uh oh!\n\n*just so you know, this is not your fault. ping a server admin to fix this.*")
+			return await ctx.reply("the server admin didn't set up roles correctly, uh oh!\n\n*just so you know, this is not your fault. ping a server admin to fix this.*")
 
 	@rain.command()
 	async def rgif(self, ctx: commands.Context):
 		"""the AI will send you one random gif for free"""
 
-		await ctx.send(self.gifs[0, len(self.gifs) - 1])
+		return await ctx.reply(random.choice(self.gifs))
 
 
 	@rain.command()
@@ -76,13 +76,13 @@ class RainCogs(commands.Cog):
 		if not target:
 			return await ctx.send_help()
 		if ctx.me is target:
-			return await ctx.send("you cant bless me! i'm already blessed internally!")
+			return await ctx.reply("you cant bless me! i'm already blessed internally!")
 		if ctx.author is target:
-			return await ctx.send("you cant bless yourself!")
+			return await ctx.reply("you cant bless yourself!")
 
 		blessed_role = await self.config.guild(ctx.guild).blessrole()
 		if not blessed_role:
-			return await ctx.send("the server admin didn't set up bless roles correctly, uh oh!\n\n*just so you know, this is not your fault. ping a server admin to fix this.*")
+			return await ctx.reply("the server admin didn't set up bless roles correctly, uh oh!\n\n*just so you know, this is not your fault. ping a server admin to fix this.*")
 		await self.blessing(ctx, target, True)
 	
 	@rain.command(aliases=["shadowrealm", "debless"])
@@ -94,10 +94,10 @@ class RainCogs(commands.Cog):
 		if not target:
 			return await ctx.send_help()
 		if ctx.me is target:
-			return await ctx.send("you cant unbless me!")
+			return await ctx.reply("you cant unbless me!")
 		if ctx.author is target:
-			return await ctx.send("you cant unbless yourself!")
+			return await ctx.reply("you cant unbless yourself!")
 		blessed_role = await self.config.guild(ctx.guild).blessrole()
 		if not blessed_role:
-			return await ctx.send("the server admin didn't set up bless roles correctly, uh oh!\n\n*just so you know, this is not your fault")
+			return await ctx.reply("the server admin didn't set up bless roles correctly, uh oh!\n\n*just so you know, this is not your fault")
 		await self.blessing(ctx, target, False)
