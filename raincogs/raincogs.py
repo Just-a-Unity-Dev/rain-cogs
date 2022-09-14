@@ -36,12 +36,12 @@ class RainCogs(commands.Cog):
 		await self.config.guild(ctx.guild).blessrole.set(int(blessRole))
 		await ctx.reply(f"Set the value of `blessrole` to `{str(int(blessRole))}`")
 
-	async def blessing(self, ctx: commands.Context, target: discord.Member, role: bool):
+	async def blessing(self, ctx: commands.Context, target: discord.Member, roleToggle: bool):
 		guild = ctx.guild
 		blessed_role = await self.config.guild(guild).blessrole()
 		role = guild.get_role(blessed_role)
 		try:
-			if role == True:
+			if roleToggle == True:
 				await target.add_roles(role, reason="blessed")
 				return await ctx.send(f"blessed {target.mention}")
 			else:
