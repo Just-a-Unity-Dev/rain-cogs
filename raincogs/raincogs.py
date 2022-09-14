@@ -30,7 +30,8 @@ class RainCogs(commands.Cog):
 
 	@rain.group()
 	async def manifest(self, ctx: commands.Context) -> None:
-		await ctx.reply(content="my physical manifestation... a plushie!", file=discord.File(r"./rain.png"))
+		"""the true manifestation"""
+		await ctx.send(content="my physical manifestation... a plushie!", file=discord.File(r"./rain.png"))
 
 	@config.command(name="blessrole")
 	async def config_blessrole(self, ctx: commands.Context, blessRole) -> None:
@@ -63,7 +64,7 @@ class RainCogs(commands.Cog):
 			with open("./gifs.txt", "r") as f:
 				self.gifs = [line.rstrip() for line in f]
 
-		await ctx.reply(self.gifs[0, len(self.gifs) - 1])
+		await ctx.send(self.gifs[0, len(self.gifs) - 1])
 
 
 	@rain.command()
