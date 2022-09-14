@@ -43,10 +43,10 @@ class RainCogs(commands.Cog):
 		try:
 			if role:
 				await target.add_roles(role, reason="blessed")
-				return await ctx.send(f"blessed {target.mention()}")
+				return await ctx.send(f"blessed {target.mention}")
 			else:
 				await target.remove_roles(role, reason="deblessed")
-				return await ctx.send(f"deblessed {target.mention()}")
+				return await ctx.send(f"deblessed {target.mention}")
 		except discord.errors.Forbidden:
 			return await ctx.send("the server admin didn't set up roles correctly, uh oh!\n\n*just so you know, this is not your fault. ping a server admin to fix this.*")
 
