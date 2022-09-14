@@ -63,13 +63,13 @@ class RainCogs(commands.Cog):
 	@rain.command(aliases=["gif"])
 	async def rgif(self, ctx: commands.Context, gif: int = None):
 		"""the AI will send you one random gif for free"""
-		gifId = gif or random.randint(0, len(self.gifs) - 1)
+		gifId = gif + 1 or random.randint(0, len(self.gifs) - 1)
 
 		if gif is not None:
 			try:
-				return await ctx.reply(f"<:manifest:1019605971410096250> **#{gifId}**\n{self.gifs[gif + 1]}")
+				return await ctx.reply(f"<:manifest:1019605971410096250> **#{gifId}**\n{self.gifs[gifId]}")
 			except IndexError:
-				return await ctx.reply(f"there was an error trying to get GIF #{gif + 1}, perhaps it doesn't exist?")
+				return await ctx.reply(f"there was an error trying to get GIF #{gifId}, perhaps it doesn't exist?")
 
 		return await ctx.reply(f"<:manifest:1019605971410096250> **#{gifId}**\n{self.gifs[gifId]}")
 	
