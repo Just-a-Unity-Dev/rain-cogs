@@ -2,17 +2,17 @@ from redbot.core import commands, Config, checks
 from pathlib import Path
 import requests
 
-class RainMod(commands.Cog):
+class RainUtil(commands.Cog):
 	"""multipurpose cog"""
 
 	def __init__(self, bot) -> None:
 		self.bot = bot
 		self.script_location = Path(__file__).absolute().parent
-		self.config = Config.get_conf(self, 23975432657)
-		default_guild = {
-			"blessrole": None
-		}
-		self.config.register_guild(**default_guild)
+		self.config = Config.get_conf(self, 635473658356)
+		# default_guild = {
+		# 	"blessrole": None
+		# }
+		# self.config.register_guild(**default_guild)
 
 	@commands.group(aliases=["ru"])
 	async def rainutil(self, ctx: commands.Context) -> None:
