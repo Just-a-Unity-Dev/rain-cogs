@@ -38,10 +38,10 @@ class RainUtil(commands.Cog):
 		output = []
 		answers = ranswers.split(",")
 		output.append(f"Question: **{question}** *by {ctx.author.mention}*\n")
-		for answer, i in enumerate(answers):
+		for i, answer in enumerate(answers):
 			output.append(f":{numbers[i]}: - {answer}\n")
 		message = await ctx.send(answers)
-		for answer, i in enumerate(answers):
+		for i, answer in enumerate(answers):
 			message.add_reaction(numbers[i])
 
 	@rainutil.command(name="steal")
