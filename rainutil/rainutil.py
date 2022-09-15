@@ -37,10 +37,10 @@ class RainUtil(commands.Cog):
 		numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 		output = []
 		answers = ranswers.split(",")
-		output.append(f"Question: **{question}** *by {ctx.author.mention}*\n")
+		output.append(f"Question: **{question}** *by {ctx.author.mention}*")
 		for i, answer in enumerate(answers):
-			output.append(f":{numbers[i]}: - {answer}\n")
-		message = await ctx.send(answers)
+			output.append(f":{numbers[i]}: - {answer}")
+		message = await ctx.send('\n'.join(output))
 		for i, answer in enumerate(answers):
 			message.add_reaction(numbers[i])
 
