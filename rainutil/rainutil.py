@@ -30,7 +30,7 @@ class RainUtil(commands.Cog):
 		pass
 
 	@rainutil.group()
-	async def roblox():
+	async def roblox(self, ctx: commands.Context):
 		"""roblox utility commands"""
 		pass
 
