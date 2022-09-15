@@ -34,7 +34,7 @@ class RainUtil(commands.Cog):
 		second question are the answers, wrapped around in quotes, only up to 9 are allowed.
 		seperate each answer with , so you get "answer1,answer2,answer3" and etc
 		"""
-		numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+		numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 		output = []
 		answers = ranswers.split(",")
 		output.append(f"Question: **{question}** *by {ctx.author.mention}*")
@@ -42,7 +42,7 @@ class RainUtil(commands.Cog):
 			output.append(f":{numbers[i]}: - {answer}")
 		message = await ctx.send('\n'.join(output))
 		for i, answer in enumerate(answers):
-			message.add_reaction(numbers[i])
+			await message.add_reaction(numbers[i])
 
 	@rainutil.command(name="steal")
 	@checks.admin_or_permissions(manage_emojis=True)
@@ -55,7 +55,7 @@ class RainUtil(commands.Cog):
 				try:
 					image = BytesIO(await r.read())
 					binary = image.getvalue()
-					if r.status is 200:
+					if r.status == 200:
 						emote: discord.Emoji = await guild.create_custom_emoji(image=binary,name=emoji.name)
 						await ctx.reply(f"emoji `{emote.name}` created")
 						return ses.close()
