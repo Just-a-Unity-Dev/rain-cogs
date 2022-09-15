@@ -1,3 +1,6 @@
+from io import BytesIO
+import aiohttp
+import discord
 from redbot.core import commands, Config, checks
 from pathlib import Path
 import requests
@@ -20,6 +23,24 @@ class RainUtil(commands.Cog):
 		rainutil - the utility part of raincogs
 		"""
 		pass
+
+	@rainutil.command(name="steal")
+	@checks.admin_or_permissions(manage_emojis=True)
+	async def emoji_steal(self, ctx: commands.Context, emoji: discord.PartialEmoji) -> None:
+		"""steals an emoji of your choice"""
+		guild = ctx.guild
+		url = emoji.url
+		async with aiohttp.ClientSession() as ses:
+			async with ses.get(url) as r:
+				try:
+					image = BytesIO(await r.read())
+					binary = image.getvalue()
+					if r.status is 200:
+						emote = await guild.create_custom_emoji(image=binary,name=emoji.name)
+						await ctx.reply("emoji created")
+						return ses.close()
+				except discord.HTTPException:
+					return await ctx.reply("this emoji is too big!")
 
 	@rainutil.group()
 	@checks.admin_or_permissions(manage_guild=True)
