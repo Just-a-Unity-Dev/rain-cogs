@@ -24,6 +24,26 @@ class RainUtil(commands.Cog):
 		"""
 		pass
 
+	@rainutil.command(name="poll")
+	async def poll_command(self, ctx: commands.Context, question: str, ranswers: str):
+		"""
+		poll command
+		this one is fairly advanced so theres that
+		syntax: poll "ques tion" "answer1,answer2,answer3,etc"
+		the first argument is the question which you can include spaces by "wrapping quotes around them"
+		second question are the answers, wrapped around in quotes, only up to 9 are allowed.
+		seperate each answer with , so you get "answer1,answer2,answer3" and etc
+		"""
+		numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+		output = []
+		answers = ranswers.split(",")
+		output.append(f"Question: **{question}** *by {ctx.author.mention}*\n")
+		for answer, i in enumerate(answers):
+			output.append(f":{numbers[i]}: - {answer}\n")
+		message = await ctx.send(answers)
+		for answer, i in enumerate(answers):
+			message.add_reaction(numbers[i])
+
 	@rainutil.command(name="steal")
 	@checks.admin_or_permissions(manage_emojis=True)
 	async def emoji_steal(self, ctx: commands.Context, emoji: discord.PartialEmoji) -> None:
