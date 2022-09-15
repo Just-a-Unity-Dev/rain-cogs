@@ -36,8 +36,8 @@ class RainUtil(commands.Cog):
 					image = BytesIO(await r.read())
 					binary = image.getvalue()
 					if r.status is 200:
-						emote = await guild.create_custom_emoji(image=binary,name=emoji.name)
-						await ctx.reply("emoji created")
+						emote: discord.Emoji = await guild.create_custom_emoji(image=binary,name=emoji.name)
+						await ctx.reply(f"emoji `{emote.name}` created")
 						return ses.close()
 				except discord.HTTPException:
 					return await ctx.reply("this emoji is too big!")
