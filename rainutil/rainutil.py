@@ -35,6 +35,7 @@ class RainUtil(commands.Cog):
 		seperate each answer with , so you get "answer1,answer2,answer3" and etc
 		"""
 		numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+		emojinumbers = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣']
 		output = []
 		answers = ranswers.split(",")
 		output.append(f"Question: **{question}** *by {ctx.author.mention}*")
@@ -42,7 +43,7 @@ class RainUtil(commands.Cog):
 			output.append(f":{numbers[i]}: - {answer}")
 		message = await ctx.send('\n'.join(output))
 		for i, answer in enumerate(answers):
-			await message.add_reaction(numbers[i])
+			await message.add_reaction(emojinumbers[i])
 
 	@rainutil.command(name="steal")
 	@checks.admin_or_permissions(manage_emojis=True)
