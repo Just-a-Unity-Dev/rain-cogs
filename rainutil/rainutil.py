@@ -122,9 +122,9 @@ class RainUtil(commands.Cog):
 				return await ctx.reply("That isn't a valid server.")
 			try:
 				await ctx.reply(repr(config))
-				base_url = config.url
-				instance = config.key
-				token = config.token
+				base_url = config["url"]
+				instance = config["key"]
+				token = config["token"]
 
 				url = base_url + f"/instances/{instance}/restart"
 				auth_header = "Basic " + base64.b64encode(f"{instance}:{token}".encode("ASCII")).decode("ASCII")
