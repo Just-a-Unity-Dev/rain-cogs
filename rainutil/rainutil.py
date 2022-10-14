@@ -93,7 +93,12 @@ class RainUtil(commands.Cog):
 		if name is None:
 			return await ctx.reply("Lacking a `name`.")
 		
-		await self.config.guild(ctx.guild).servers.pop(name)
+		async with self.config.guild(ctx.guild).servers() as servers:
+			if name not in servers:
+				await ctx.send("That server did not exist.")
+				return
+
+			del servers[name]
 
 		return await ctx.reply(f"Removed server {name}.")
 
@@ -106,7 +111,11 @@ class RainUtil(commands.Cog):
 		await ctx.message.add_reaction("⏰")
 
 		async with self.config.guild(ctx.guild).servers() as servers:
+			if name not in servers:
+				return await ctx.send("That server did not exist.")
 			config = servers[name]
+			if config is None:
+				return await ctx.reply("That isn't a valid server.")
 			try:
 				base_url = config[0]
 				instance = config[1]
