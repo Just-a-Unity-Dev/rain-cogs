@@ -85,7 +85,11 @@ class RainUtil(commands.Cog):
 		if api_key is None:
 			return await ctx.reply("Lacking a `api_key`.")
 		async with self.config.guild(ctx.guild).servers() as servers:
-			servers[name] = [server_url, instance, api_key]
+			servers[name] = {
+				"url": server_url,
+				"key": instance,
+				"token": api_key
+			}
 		return await ctx.reply(f"Created new server {name}.")
 	
 	@config.command("removeserver")
@@ -117,9 +121,9 @@ class RainUtil(commands.Cog):
 			if config is None:
 				return await ctx.reply("That isn't a valid server.")
 			try:
-				base_url = config[0]
-				instance = config[1]
-				token = config[2]
+				base_url = config.url
+				instance = config.key
+				token = config.token
 
 				url = base_url + f"/instances/{instance}/restart"
 				auth_header = "Basic " + base64.b64encode(f"{instance}:{token}".encode("ASCII")).decode("ASCII")
@@ -128,7 +132,7 @@ class RainUtil(commands.Cog):
 					async def load():
 						async with session.post(url, headers={"Authorization": auth_header}) as resp:
 							if resp.status != 200:
-								raise Exception(f"Wrong status code: {resp.status}")
+								await ctx.reply(f"Wrong status code: {resp.status}")
 							else:
 								return await ctx.reply(f"Restarted `{name}`")
 					await asyncio.wait_for(load(), timeout=5)
