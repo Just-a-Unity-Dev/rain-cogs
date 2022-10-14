@@ -121,11 +121,14 @@ class RainUtil(commands.Cog):
 			if config is None:
 				return await ctx.reply("That isn't a valid server.")
 			try:
-				base_url = config["url"]
-				instance = config["key"]
-				token = config["token"]
+				base_url: str = config["url"]
+				instance: str = config["key"]
+				token: str = config["token"]
 
-				url = base_url + f"instances/{instance}/restart"
+				if base_url.endswith("/"):
+					base_url = base_url[:1]
+
+				url = base_url + f"/instances/{instance}/restart"
 				auth_header = "Basic " + base64.b64encode(f"{instance}:{token}".encode("ASCII")).decode("ASCII")
 
 				async with aiohttp.ClientSession() as session:
