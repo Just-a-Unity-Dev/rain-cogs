@@ -118,8 +118,6 @@ class RainUtil(commands.Cog):
 			if name not in servers:
 				return await ctx.send("That server did not exist.")
 			config = servers[name]
-			if config is None:
-				return await ctx.reply("That isn't a valid server.")
 			try:
 				base_url: str = config["url"]
 				instance: str = config["key"]
@@ -130,8 +128,6 @@ class RainUtil(commands.Cog):
 
 				url = base_url + f"/instances/{instance}/restart"
 				auth_header = "Basic " + base64.b64encode(f"{instance}:{token}".encode("ASCII")).decode("ASCII")
-
-				await ctx.reply(f"{url} {auth_header}")
 
 				async with aiohttp.ClientSession() as session:
 					async def load():
@@ -145,4 +141,4 @@ class RainUtil(commands.Cog):
 				return await ctx.reply("Server timed out.")
 			except Exception as err:
 				# wtf
-				return await ctx.reply(f"Unexpected error occurred: {repr(err)}")
+				return await ctx.reply(f"Unexpected error occurred")
