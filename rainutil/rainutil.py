@@ -1,5 +1,7 @@
 from io import BytesIO
 import aiohttp
+import asyncio
+import base64
 import discord
 from redbot.core import commands, Config, checks
 from pathlib import Path
@@ -12,10 +14,10 @@ class RainUtil(commands.Cog):
 		self.bot = bot
 		self.script_location = Path(__file__).absolute().parent
 		self.config = Config.get_conf(self, 635473658356)
-		# default_guild = {
-		# 	"blessrole": None
-		# }
-		# self.config.register_guild(**default_guild)
+		default_guild = {
+			"servers": {}
+		}
+		self.config.register_guild(**default_guild)
 
 	@commands.group(aliases=["ru"])
 	async def rainutil(self, ctx: commands.Context) -> None:
@@ -71,17 +73,56 @@ class RainUtil(commands.Cog):
 		"""
 		pass
 
-	@rainutil.group()
-	async def roblox(self, ctx: commands.Context):
-		"""roblox utility commands"""
-		pass
+	@config.command(name="addserver")
+	async def config_addserver(self, ctx: commands.Context, name, server_url, instance, api_key) -> None:
+		"""USE THIS COMMAND IN A DM. THIS MAY RESULT IN LEAKING YOUR WATCHDOG API KEY."""
+		if name is None:
+			return await ctx.reply("Lacking a `name`.")
+		if instance is None:
+			return await ctx.reply("Lacking an `instance`.")
+		if server_url is None:
+			return await ctx.reply("Lacking a `server_url`.")
+		if api_key is None:
+			return await ctx.reply("Lacking a `api_key`.")
+		await self.config.guild(ctx.guild).servers.__setitem__(name, [server_url, instance, api_key])
+		return await ctx.reply(f"Created new server {name}.")
+	
+	@config.command("removeserver")
+	async def config_removeserver(self, ctx: commands.Context, name):
+		if name is None:
+			return await ctx.reply("Lacking a `name`.")
+		
+		await self.config.guild(ctx.guild).servers.pop(name)
 
-	@roblox.command(name="get_user")
-	async def roblox_getUser(self, ctx: commands.Context, user: str):
-		"""gets the user with a userid/username"""
-		usernameAPI = f"https://api.roblox.com/users/get-by-username?username={user}"
-		request = requests.get(usernameAPI, timeout=5)
-		json = request.json()
-		if 'errorMessage' in json:
-			return await ctx.reply("an error occured while getting that user, are you sure they exist?")
-		await ctx.reply(f"**Username**: {json['Username']}\n**UserID**: {json['Id']}\n**Online**: `{json['IsOnline']}`\n")
+		return await ctx.reply(f"Removed server {name}.")
+
+	@rainutil.command(name="restart")
+	@checks.admin_or_permissions(manage_guild=True)
+	async def restart(self, ctx: commands.Context, name):
+		if name is None:
+			return await ctx.reply("Lacking a `name`.")
+		
+		config = self.config.guild(ctx.guild).servers.get(name)
+		await ctx.add_reaction("⏰")
+
+		try:
+			base_url = config[0]
+			instance = config[1]
+			token = config[2]
+
+			url = base_url + f"/instances/{instance}/restart"
+			auth_header = "Basic " + base64.b64encode(f"{instance}:{token}".encode("ASCII")).decode("ASCII")
+
+			async with aiohttp.ClientSession() as session:
+				async def load():
+					async with session.post(url, headers={"Authorization": auth_header}) as resp:
+						if resp.status != 200:
+							raise Exception(f"Wrong status code: {resp.status}")
+						else:
+							return await ctx.reply(f"Restarted `{name}`")
+				await asyncio.wait_for(load(), timeout=5)
+		except asyncio.TimeoutError:
+			return await ctx.reply("Server timed out.")
+		except Exception:
+			# wtf
+			return await ctx.reply("Unexpected error occurred")
