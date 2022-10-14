@@ -84,7 +84,8 @@ class RainUtil(commands.Cog):
 			return await ctx.reply("Lacking a `server_url`.")
 		if api_key is None:
 			return await ctx.reply("Lacking a `api_key`.")
-		await self.config.guild(ctx.guild).servers().__setitem__(name, [server_url, instance, api_key])
+		async with self.config.guild(ctx.guild).servers() as servers:
+			servers[name] = [server_url, instance, api_key]
 		return await ctx.reply(f"Created new server {name}.")
 	
 	@config.command("removeserver")
@@ -105,24 +106,25 @@ class RainUtil(commands.Cog):
 		config = self.config.guild(ctx.guild).servers().get(name)
 		await ctx.add_reaction("⏰")
 
-		try:
-			base_url = config[0]
-			instance = config[1]
-			token = config[2]
+		async with ctx.typing():
+			try:
+				base_url = config[0]
+				instance = config[1]
+				token = config[2]
 
-			url = base_url + f"/instances/{instance}/restart"
-			auth_header = "Basic " + base64.b64encode(f"{instance}:{token}".encode("ASCII")).decode("ASCII")
+				url = base_url + f"/instances/{instance}/restart"
+				auth_header = "Basic " + base64.b64encode(f"{instance}:{token}".encode("ASCII")).decode("ASCII")
 
-			async with aiohttp.ClientSession() as session:
-				async def load():
-					async with session.post(url, headers={"Authorization": auth_header}) as resp:
-						if resp.status != 200:
-							raise Exception(f"Wrong status code: {resp.status}")
-						else:
-							return await ctx.reply(f"Restarted `{name}`")
-				await asyncio.wait_for(load(), timeout=5)
-		except asyncio.TimeoutError:
-			return await ctx.reply("Server timed out.")
-		except Exception:
-			# wtf
-			return await ctx.reply("Unexpected error occurred")
+				async with aiohttp.ClientSession() as session:
+					async def load():
+						async with session.post(url, headers={"Authorization": auth_header}) as resp:
+							if resp.status != 200:
+								raise Exception(f"Wrong status code: {resp.status}")
+							else:
+								return await ctx.reply(f"Restarted `{name}`")
+					await asyncio.wait_for(load(), timeout=5)
+			except asyncio.TimeoutError:
+				return await ctx.reply("Server timed out.")
+			except Exception:
+				# wtf
+				return await ctx.reply("Unexpected error occurred")
