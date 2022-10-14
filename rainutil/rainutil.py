@@ -134,6 +134,7 @@ class RainUtil(commands.Cog):
 					await asyncio.wait_for(load(), timeout=5)
 			except asyncio.TimeoutError:
 				return await ctx.reply("Server timed out.")
-			except Exception:
+			except Exception as err:
 				# wtf
+				print(repr(err))
 				return await ctx.reply("Unexpected error occurred")
