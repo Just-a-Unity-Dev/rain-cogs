@@ -103,7 +103,7 @@ class RainUtil(commands.Cog):
 		if name is None:
 			return await ctx.reply("Lacking a `name`.")
 		
-		await ctx.add_reaction("⏰")
+		await ctx.message.add_reaction("⏰")
 
 		async with self.config.guild(ctx.guild).servers() as servers:
 			config = servers[name]
