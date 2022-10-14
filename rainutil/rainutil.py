@@ -121,7 +121,6 @@ class RainUtil(commands.Cog):
 			if config is None:
 				return await ctx.reply("That isn't a valid server.")
 			try:
-				await ctx.reply(repr(config))
 				base_url = config["url"]
 				instance = config["key"]
 				token = config["token"]
