@@ -84,7 +84,7 @@ class RainUtil(commands.Cog):
 			return await ctx.reply("Lacking a `server_url`.")
 		if api_key is None:
 			return await ctx.reply("Lacking a `api_key`.")
-		await self.config.guild(ctx.guild).servers.__setitem__(name, [server_url, instance, api_key])
+		await self.config.guild(ctx.guild).servers().__setitem__(name, [server_url, instance, api_key])
 		return await ctx.reply(f"Created new server {name}.")
 	
 	@config.command("removeserver")
@@ -102,7 +102,7 @@ class RainUtil(commands.Cog):
 		if name is None:
 			return await ctx.reply("Lacking a `name`.")
 		
-		config = self.config.guild(ctx.guild).servers.get(name)
+		config = self.config.guild(ctx.guild).servers().get(name)
 		await ctx.add_reaction("⏰")
 
 		try:
