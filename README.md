@@ -1,5 +1,5 @@
 # rain-cogs
-a personal cog designed for me
+a personal cog designed for SS14 servers/general use
 
 ## license
-MIT, however i don't want help on this cog (it's my cog, afterall.)
+MIT
