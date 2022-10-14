@@ -41,7 +41,7 @@ class RainMod(commands.Cog):
 	async def blessing(self, ctx: commands.Context, target: discord.Member, roleToggle: bool):
 		guild = ctx.guild
 		blessed_role = await self.config.guild(guild).blessrole()
-		role = guild.get_role(blessed_role)
+		role = guild.get_role(int(blessed_role))
 		try:
 			if roleToggle == True:
 				await target.add_roles(role, reason="blessed")
