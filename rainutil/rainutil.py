@@ -128,6 +128,8 @@ class RainUtil(commands.Cog):
 				url = base_url + f"/instances/{instance}/restart"
 				auth_header = "Basic " + base64.b64encode(f"{instance}:{token}".encode("ASCII")).decode("ASCII")
 
+				print(url, auth_header)
+
 				async with aiohttp.ClientSession() as session:
 					async def load():
 						async with session.post(url, headers={"Authorization": auth_header}) as resp:
