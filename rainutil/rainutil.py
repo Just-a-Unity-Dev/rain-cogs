@@ -125,7 +125,7 @@ class RainUtil(commands.Cog):
 			github[name] = {
 				"name": name,
 				"prefix": prefix,
-				"url": self.strip_link(url),
+				"url": url,
 			}
 		return await ctx.reply(f"Created new github {name}.")
 	
