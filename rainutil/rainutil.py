@@ -75,7 +75,7 @@ class RainUtil(commands.Cog):
 				issueid = int(match.group(2))
 				for hub in github:
 					if hub['prefix'] == prefix:
-						return f"{hub.url}/issues/{issueid}"
+						return await message.reply(f"{hub.url}/issues/{issueid}")
 					else:
 						return
 
@@ -89,7 +89,7 @@ class RainUtil(commands.Cog):
 
 	@config.command(name="addgh")
 	async def config_addgithub(self, ctx: commands.Context, name, url, prefix) -> None:
-		"""USE THIS COMMAND IN A DM. THIS MAY RESULT IN LEAKING YOUR WATCHDOG API KEY."""
+		"""Adds a GitHub to use."""
 		if name is None:
 			return await ctx.reply("Lacking a `name`.")
 		if prefix is None:
