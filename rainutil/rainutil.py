@@ -87,7 +87,7 @@ class RainUtil(commands.Cog):
 			return embed
 
 	def strip_link(link: str):
-		return link.replace("http", "").replace("https", "").replace("://", "").replace("github.com/", "")
+		return link.replace("http", "").replace("https", "").replace("://", "").replace("github.com/", "").replace("%27%7D", "")
 
 	@commands.Cog.listener()
 	async def on_message(self, message: discord.Message):
@@ -100,7 +100,7 @@ class RainUtil(commands.Cog):
 				for key in keys:
 					value = github[key]
 					await message.channel.send(repr(value))
-					if value['prefix'] == prefix:
+					if str(value['prefix']) == str(prefix):
 						await message.channel.send(f"{value['url']}/issues/{issueid}, {self.strip_link(value['url'])}")
 						return await message.channel.send(embed=self.get_github_embed(self.strip_link(value['url']), issueid))
 
@@ -125,7 +125,7 @@ class RainUtil(commands.Cog):
 			github[name] = {
 				"name": name,
 				"prefix": prefix,
-				"url": url,
+				"url": self.strip_link(url),
 			}
 		return await ctx.reply(f"Created new github {name}.")
 	
