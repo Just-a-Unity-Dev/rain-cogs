@@ -69,7 +69,6 @@ class RainUtil(commands.Cog):
 	
 	@commands.Cog.listener()
 	async def on_message(self, message):
-		await message.channel.send("yo")
 		for match in self.issue.finditer(message.content):
 			prefix = match.group(1)
 			issueid = int(match.group(2))
