@@ -5,7 +5,7 @@ import base64
 import discord
 from redbot.core import commands, Config, checks
 from pathlib import Path
-import requests
+import re
 
 class RainUtil(commands.Cog):
 	"""multipurpose cog"""
@@ -14,8 +14,10 @@ class RainUtil(commands.Cog):
 		self.bot = bot
 		self.script_location = Path(__file__).absolute().parent
 		self.config = Config.get_conf(self, 635473658356)
+		self.issue = r"\[(?:(\S+)#|#)?([0-9]+)\]"
 		default_guild = {
-			"servers": {}
+			"servers": {},
+			"github": {}
 		}
 		self.config.register_guild(**default_guild)
 
@@ -64,6 +66,16 @@ class RainUtil(commands.Cog):
 						return ses.close()
 				except discord.HTTPException:
 					return await ctx.reply("this emoji is too big!")
+	
+	@rainutil.event
+	async def on_message(self, message):
+		for match in self.issue.finditer(message.content):
+			prefix = match.group(1)
+			issueid = int(match.group(2))
+
+			await message.reply(prefix, issueid)
+
+		await self.bot.process_commands(message)
 
 	@rainutil.group()
 	@checks.admin_or_permissions(manage_guild=True)
