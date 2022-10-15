@@ -1,4 +1,4 @@
-from io import BytesIO
+pfrom io import BytesIO
 import aiohttp
 import asyncio
 import base64
@@ -68,7 +68,7 @@ class RainUtil(commands.Cog):
 				except discord.HTTPException:
 					return await ctx.reply("This emoji is too big!")
 	
-	def github_url(sub: str) -> str:
+	def github_url(self, sub: str) -> str:
 		return f"https://api.github.com{sub}"
 	
 	def get_github_embed(self, repo: str, issueid: int):
