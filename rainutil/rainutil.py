@@ -82,7 +82,7 @@ class RainUtil(commands.Cog):
 			embed.title = data['title']
 			embed.url = f"https://github.com/{repo}/issues/{issueid}"
 			embed.description = body
-			embed.author = data['user']['login']
+			embed.set_author(name=data['user']['login'], icon=discord.Embed.Empty, icon_url=data['user']['avatar_url'])
 
 			return embed
 
