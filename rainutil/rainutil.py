@@ -99,6 +99,7 @@ class RainUtil(commands.Cog):
 				await message.channel.send(repr(keys))
 				for key in keys:
 					value = github[key]
+					await message.channel.send(repr(value))
 					if value['prefix'] == prefix:
 						await message.channel.send(f"{value['url']}/issues/{issueid}, {self.strip_link(value['url'])}")
 						return await message.channel.send(embed=self.get_github_embed(self.strip_link(value['url']), issueid))
