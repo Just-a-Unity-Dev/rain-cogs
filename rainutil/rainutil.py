@@ -77,7 +77,7 @@ class RainUtil(commands.Cog):
 			data = json.load(url)
 			embed = discord.Embed()
 
-			body = (data['body'][:75] + '...') if len(data['body']) > 75 else data['body']
+			body = (data['body'][:300] + '...') if len(data['body']) > 75 else data['body']
 
 			embed.title = data['title']
 			embed.url = f"https://github.com/{repo}/issues/{issueid}"
