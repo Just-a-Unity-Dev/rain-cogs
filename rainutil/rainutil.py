@@ -17,7 +17,7 @@ class RainUtil(commands.Cog):
 		self.issue = r"\[(?:(\S+)#|#)?([0-9]+)\]"
 		default_guild = {
 			"servers": {},
-			"github": {}
+			"github": []
 		}
 		self.config.register_guild(**default_guild)
 
@@ -73,11 +73,8 @@ class RainUtil(commands.Cog):
 			for match in re.finditer(self.issue, message.content):
 				prefix = match.group(1)
 				issueid = int(match.group(2))
-				for hub in github:
-					if hub['prefix'] == prefix:
-						return await message.reply(f"{hub.url}/issues/{issueid}")
-					else:
-						return
+				if prefix == None:
+					return await message.reply(f"{github[0].url}/issues/{issueid}")
 
 	@rainutil.group()
 	@checks.admin_or_permissions(manage_guild=True)
@@ -97,11 +94,11 @@ class RainUtil(commands.Cog):
 		if url is None:
 			return await ctx.reply("Lacking a `url`.")
 		async with self.config.guild(ctx.guild).github() as github:
-			github[name] = {
+			github.push({
 				"name": name,
 				"prefix": prefix,
 				"url": url,
-			}
+			})
 		return await ctx.reply(f"Created new github {name}.")
 	
 	@config.command("removegh")
