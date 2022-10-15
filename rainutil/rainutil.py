@@ -68,12 +68,16 @@ class RainUtil(commands.Cog):
 					return await ctx.reply("this emoji is too big!")
 	
 	@commands.Cog.listener()
-	async def on_message(self, message):
-		for match in re.finditer(self.issue, message.content):
-			prefix = match.group(1)
-			issueid = int(match.group(2))
-
-			await message.channel.send(f"{prefix}, {issueid}")
+	async def on_message(self, message: discord.Message):
+		async with self.config.guild(message.channel.guild).github() as github:
+			for match in re.finditer(self.issue, message.content):
+				prefix = match.group(1)
+				issueid = int(match.group(2))
+				for hub in github:
+					if hub['prefix'] == prefix:
+						return f"{hub.url}/issues/{issueid}"
+					else:
+						return
 
 	@rainutil.group()
 	@checks.admin_or_permissions(manage_guild=True)
@@ -82,6 +86,37 @@ class RainUtil(commands.Cog):
 		configuration for rain util
 		"""
 		pass
+
+	@config.command(name="addgh")
+	async def config_addgithub(self, ctx: commands.Context, name, url, prefix) -> None:
+		"""USE THIS COMMAND IN A DM. THIS MAY RESULT IN LEAKING YOUR WATCHDOG API KEY."""
+		if name is None:
+			return await ctx.reply("Lacking a `name`.")
+		if prefix is None:
+			return await ctx.reply("Lacking a `prefix`.")
+		if url is None:
+			return await ctx.reply("Lacking a `url`.")
+		async with self.config.guild(ctx.guild).github() as github:
+			github[name] = {
+				"name": name,
+				"prefix": prefix,
+				"url": url,
+			}
+		return await ctx.reply(f"Created new github {name}.")
+	
+	@config.command("removegh")
+	async def config_removegithub(self, ctx: commands.Context, name):
+		if name is None:
+			return await ctx.reply("Lacking a `name`.")
+		
+		async with self.config.guild(ctx.guild).github() as github:
+			if name not in github:
+				await ctx.send("That github did not exist.")
+				return
+
+			del github[name]
+
+		return await ctx.reply(f"Removed server {name}.")
 
 	@config.command(name="addserver")
 	async def config_addserver(self, ctx: commands.Context, name, server_url, instance, api_key) -> None:
