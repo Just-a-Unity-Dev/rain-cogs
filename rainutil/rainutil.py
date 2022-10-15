@@ -82,8 +82,7 @@ class RainUtil(commands.Cog):
 			embed.title = data['title']
 			embed.url = f"https://github.com/{repo}/issues/{issueid}"
 			embed.description = body
-			embed.set_author(name=data['user']['login'], icon=discord.Embed.Empty, icon_url=data['user']['avatar_url'])
-
+			embed.set_author(name=data['user']['login'], icon_url=data['user']['avatar_url'])
 			return embed
 
 	def strip_link(link: str):
@@ -96,12 +95,10 @@ class RainUtil(commands.Cog):
 				prefix = match.group(1)
 				issueid = int(match.group(2))
 				keys = github.keys()
-				await message.channel.send(repr(keys))
 				for key in keys:
 					value = github[key]
 					
 					if str(value['prefix']) == str(prefix):
-						await message.channel.send(f"{value['url']}/issues/{issueid}")
 						return await message.channel.send(embed=self.get_github_embed(value['url'], issueid))
 
 	@rainutil.group()
