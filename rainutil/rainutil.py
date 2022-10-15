@@ -19,7 +19,7 @@ class RainUtil(commands.Cog):
 		}
 		self.config.register_guild(**default_guild)
 
-	@commands.group(aliases=["ru"])
+	@commands.group(aliases=["ru", "u"])
 	async def rainutil(self, ctx: commands.Context) -> None:
 		"""
 		rainutil - the utility part of raincogs
