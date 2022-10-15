@@ -1,4 +1,4 @@
-pfrom io import BytesIO
+from io import BytesIO
 import aiohttp
 import asyncio
 import base64
