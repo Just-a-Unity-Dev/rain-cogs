@@ -67,15 +67,13 @@ class RainUtil(commands.Cog):
 				except discord.HTTPException:
 					return await ctx.reply("this emoji is too big!")
 	
-	@rainutil.event
+	@commands.Cog.listener()
 	async def on_message(self, message):
 		for match in self.issue.finditer(message.content):
 			prefix = match.group(1)
 			issueid = int(match.group(2))
 
 			await message.reply(prefix, issueid)
-
-		await self.bot.process_commands(message)
 
 	@rainutil.group()
 	@checks.admin_or_permissions(manage_guild=True)
