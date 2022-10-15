@@ -73,11 +73,13 @@ class RainUtil(commands.Cog):
 			for match in re.finditer(self.issue, message.content):
 				prefix = match.group(1)
 				issueid = int(match.group(2))
-				keys = github.items()
+				keys = github.keys()
 				for key in keys:
+					value = github[key]
+					await message.channel.send(repr(value))
 					await message.channel.send(repr(key))
 					if key['prefix'] == prefix:
-						return await message.channel.send(f"{key['url']}/issues/{issueid}")
+						return await message.channel.send(f"{value['url']}/issues/{issueid}")
 				return await message.channel.send("Doesn't exist.")
 
 	@rainutil.group()
