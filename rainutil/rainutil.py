@@ -73,7 +73,7 @@ class RainUtil(commands.Cog):
 			prefix = match.group(1)
 			issueid = int(match.group(2))
 
-			await message.reply(prefix, issueid)
+			await message.channel.send(f"{prefix}, {issueid}")
 
 	@rainutil.group()
 	@checks.admin_or_permissions(manage_guild=True)
