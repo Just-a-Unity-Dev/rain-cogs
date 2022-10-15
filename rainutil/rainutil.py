@@ -75,10 +75,10 @@ class RainUtil(commands.Cog):
 				issueid = int(match.group(2))
 				keys = github.items()
 				for key in keys:
+					await message.channel.send(repr(key))
 					if key['prefix'] == prefix:
 						return await message.channel.send(f"{key['url']}/issues/{issueid}")
-					else:
-						return await message.channel.send("Doesn't exist.")
+				return await message.channel.send("Doesn't exist.")
 
 	@rainutil.group()
 	@checks.admin_or_permissions(manage_guild=True)
