@@ -96,6 +96,7 @@ class RainUtil(commands.Cog):
 				prefix = match.group(1)
 				issueid = int(match.group(2))
 				keys = github.keys()
+				await message.channel.send(repr(keys))
 				for key in keys:
 					value = github[key]
 					if value['prefix'] == prefix:
