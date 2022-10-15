@@ -3,6 +3,7 @@ import aiohttp
 import asyncio
 import base64
 import discord
+import urllib.request, json 
 from redbot.core import commands, Config, checks
 from pathlib import Path
 import re
@@ -62,11 +63,32 @@ class RainUtil(commands.Cog):
 					binary = image.getvalue()
 					if r.status == 200:
 						emote: discord.Emoji = await guild.create_custom_emoji(image=binary,name=emoji.name)
-						await ctx.reply(f"emoji `{emote.name}` created")
+						await ctx.reply(f"Emoji `{emote.name}` created")
 						return ses.close()
 				except discord.HTTPException:
-					return await ctx.reply("this emoji is too big!")
+					return await ctx.reply("This emoji is too big!")
 	
+	def github_url(sub: str) -> str:
+		return f"https://api.github.com{sub}"
+	
+	def get_github_embed(self, repo: str, issueid: int):
+		url = self.github_url(f"/repos/{repo}/issues/{issueid}")
+		with urllib.request.urlopen(url) as url:
+			data = json.load(url)
+			embed = discord.Embed()
+
+			body = (data['body'][:75] + '...') if len(data['body']) > 75 else data['body']
+
+			embed.title = data['title']
+			embed.url = f"https://github.com/{repo}/issues/{issueid}"
+			embed.description = body
+			embed.author = data['user']['login']
+
+			return embed
+
+	def strip_link(link: str):
+		return link.replace("http", "").replace("https", "").replace("://", "").replace("github.com/", "")
+
 	@commands.Cog.listener()
 	async def on_message(self, message: discord.Message):
 		async with self.config.guild(message.channel.guild).github() as github:
@@ -77,8 +99,8 @@ class RainUtil(commands.Cog):
 				for key in keys:
 					value = github[key]
 					if value['prefix'] == prefix:
-						return await message.channel.send(f"{value['url']}/issues/{issueid}")
-				return await message.channel.send("Doesn't exist.")
+						await message.channel.send(f"{value['url']}/issues/{issueid}, {self.strip_link(value['url'])}")
+						return await message.channel.send(embed=self.get_github_embed(self.strip_link(value['url']), issueid))
 
 	@rainutil.group()
 	@checks.admin_or_permissions(manage_guild=True)
